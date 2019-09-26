@@ -1,7 +1,7 @@
 #include "mbed.h"
 
-// screen /dev/ttyACM0 9000 -> CARTE
-// screen /dev/ttyUSB0 9600 -> CONVERTISSEUR
+// screen /dev/ttyACM0 9600 -> regarde la liaison PC - CARTE (USB -> µUSB)
+// screen /dev/ttyUSB0 9600 -> regarde la liaison PC - CONVERTISSEUR (USB -> filaire)
 
 /* 
     afficher tous les screen -> screen -ls

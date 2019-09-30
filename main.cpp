@@ -8,6 +8,11 @@
     attacher un screen -> screen -r numero
     quitter un screen C^a, puis \, puis y
 */ 
+
+/*
+    déclarer une liaison série PC - CARTE -> Serial pc_nucleo(USBTX, USBRX)   
+    Ecrire sur cette liaison : pc_nucleo.printf("blabla");
+*/
    
  
 Serial nucleo_modem(D1,D0);

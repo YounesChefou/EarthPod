@@ -1,0 +1,22 @@
+// test.cpp
+// Tested on the NUCLEO-L432KC (Cortex-M4)
+// 2019-09-15
+
+#include "mbed.h"
+#include "MMA8451.h"
+
+DigitalOut myled(LED1);
+I2C i2c(I2C_SDA, I2C_SCL);
+MMA8451 mma(i2c, MMA8451_ADDRESS_SA0_1);
+
+int main() {
+    printf("WHO AM I: 0x%02X\r\n", mma.id());
+    while(1) {
+        mma.getXYZ();
+        printf("x: %f\ty: %f\tz: %f\r\n", mma.x, mma.y, mma.z);
+        myled = !myled;
+        wait(0.5);
+    }
+}
+
+

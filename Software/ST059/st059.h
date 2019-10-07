@@ -1,3 +1,3 @@
 #include "mbed.h"
 
-void detection_st059();
+int detection_st059();

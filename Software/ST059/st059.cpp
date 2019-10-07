@@ -7,11 +7,13 @@ DigitalIn S(D3);        //entrée S du capteur
 
 int val;                // valeur temporaire de stockage des infos
 
-void detection_st059(){ //detecte les vibrations et allume la led ld3.
+int detection_st059(){ //detecte les vibrations et allume la led ld3.
 
     val = S.read();
      
     if (val) led3.write(1);
     
     else led3.write(0);
+    
+    return val;
 }

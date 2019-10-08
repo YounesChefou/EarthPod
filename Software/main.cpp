@@ -1,31 +1,53 @@
 #include "mbed.h"
+#include "MMA8451.h"
+#include "st059.h"
 
-// screen /dev/ttyACM0 9600 -> regarde la liaison PC - CARTE (USB -> µUSB)
-// screen /dev/ttyUSB0 9600 -> regarde la liaison PC - CONVERTISSEUR (USB -> filaire)
+Timer t10sec;
+I2C i2c(D12, A6); //I2C3 
+MMA8451 accelerometre(i2c, 0x1D);
+Serial sigfox(D1, D0);
+//DigitalOut alimWisol(D2);
+//DigitalOut alimMMA(D4);
+int xAccel, yAccel, zAccel;
 
-/* 
-    afficher tous les screen -> screen -ls
-    attacher un screen -> screen -r numero
-    quitter un screen C^a, puis \, puis y
-*/ 
-
-/*
-    déclarer une liaison série PC - CARTE -> Serial pc_nucleo(USBTX, USBRX)   
-    Ecrire sur cette liaison : pc_nucleo.printf("blabla");
-*/
-   
- 
-Serial nucleo_modem(D1,D0);
-
+int n = 0; //nombre d'itérations d'envoi de données
 int main() {
-    int i = 1;
     
-    while (i < 4) {
-        nucleo_modem.printf("AT$SF=%02x\r\n", i);
-        i++;
-        wait(5);
+    while(1){
+            
+            //accelerometre.setStandbyMode(); //l'accelerometre est en veille lorsqu'il n'y a pas de vibrations.
+            //Mettre le module Wisol en veille
+            //sigfox.printf("AT$P=1")
+        
+            if(detection_st059() == 1){
+                printf("Vibration\r\n");
+                t10sec.start(); 
+                accelerometre.setActiveMode();
+                //Activer le module Wisol
+                while(n <= 6){
+                    
+                    if(t10sec.read() >= 10){
+                        
+                        //Acquisition données
+                        xAccel = abs(accelerometre.getX())*1000;
+                        yAccel = abs(accelerometre.getY())*1000;
+                        zAccel = abs(accelerometre.getZ())*1000;
+                        
+                        printf("X = %d, Y = %d, Z = %d\r\n",xAccel, yAccel, zAccel);
+                        
+                        //Envoi données Sigfox
+                        sigfox.printf("AT$SF=%04x%04x%04x\r\n",xAccel, yAccel, zAccel);
+                        printf("AT$SF=%04x%04x%04x\r\n",xAccel, yAccel, zAccel);
+                        
+                        n++;
+                        
+                        t10sec.reset();
+                    }
+                }
+                
+                n = 0; 
+            }
+            
     }
-    
-    while(1);
     
 }

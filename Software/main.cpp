@@ -10,6 +10,7 @@ Serial sigfox(D1, D0);
 DigitalOut alimentation(D2); // pin de controle de l'alimentation : D2 = 1 <=> passant  
 
 int xAccel, yAccel, zAccel;
+int bender;
 
 int n = 0; //nombre d'itérations d'envoi de données
 
@@ -19,7 +20,7 @@ int main() {
     
     while(1){
             
-            //accelerometre.setStandbyMode(); //l'accelerometre est en veille lorsqu'il n'y a pas de vibrations.
+            accelerometre.setStandbyMode(); //l'accelerometre est en veille lorsqu'il n'y a pas de vibrations.
             //Mettre le module Wisol en veille
             //sigfox.printf("AT$P=1")
             
@@ -36,11 +37,11 @@ int main() {
                         xAccel = abs(accelerometre.getX())*1000;
                         yAccel = abs(accelerometre.getY())*1000;
                         zAccel = abs(accelerometre.getZ())*1000;
-                        
+                        bender = abs(mesure())*1000;
                         printf("X = %d, Y = %d, Z = %d\r\n",xAccel, yAccel, zAccel);
                         
                         //Envoi données Sigfox
-                        sigfox.printf("AT$SF=%04x%04x%04x\r\n",xAccel, yAccel, zAccel);
+                        sigfox.printf("AT$SF=%04x%04x%04x%04x\r\n",xAccel, yAccel, zAccel, bender);
                         printf("AT$SF=%04x%04x%04x\r\n",xAccel, yAccel, zAccel);
                         
                         n++;

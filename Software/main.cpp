@@ -3,13 +3,15 @@
 #include "st059.h"
 #include "bender.h"
 
+
 Timer t10sec;
 Timer tNorme;
 I2C i2c(D12, A6); //I2C3 
 MMA8451 accelerometre(i2c, 0x1D);
+
 Serial sigfox(D1, D0);
-InterruptIn ST059(D13);
-DigitalOut alimMMA(D9); // pin de controle de l'alimentation : D9 = 1 <=> passant  
+AnalogIn batterie(A6); // Tension au niveau de la batterie, sachant qu'on travaille en 3.3V
+InterruptIn ST059(D13); 
 
 double xAccel, yAccel, zAccel;
 double bender;
@@ -56,6 +58,8 @@ void reveil(){
             //Acquisition données
             int moyenneNorme = (sommeNormes/nbMesures)*1000;
             int moyenneBender = (sommeBender/nbMesures)*1000;
+            
+            //int niveauBatterie = batterie.read()*1000;
 
             printf("===========================================\r\n");
             printf("MoyenneNorme : %d, MoyenneBender : %d \r\n", moyenneNorme, moyenneBender);
@@ -63,7 +67,7 @@ void reveil(){
             //Envoi données Sigfox
             printf("AT$SF=%04x%04x\r\n", moyenneNorme, moyenneBender);
             printf("===========================================\r\n");
-            sigfox.printf("AT$SF=%04x%04x\r\n", moyenneNorme, moyenneBender);
+            sigfox.printf("AT$SF=%04x%04x%04x\r\n", moyenneNorme, moyenneBender);
             
             sommeNormes = 0;
             sommeBender = 0;
@@ -77,8 +81,7 @@ void reveil(){
     n = 0; 
 }
 
-int main() {    
-   // alimMMA = 1;
+int main(){
     ST059.rise(&reveil);
     sleep();
     
@@ -88,7 +91,7 @@ int main() {
         //Mettre le module Wisol en veille
         //sigfox.printf("AT$P=1")
                 
-        printf("Sleep\r\n");
+        printf("Sleep1\r\n");
         sleep();   // deepsleep ne fonctionne pas
     }
     

@@ -1,4 +1,4 @@
 #include "mbed.h"
 
 double mesure();
-double mesure_seuil();
+double mesure_seuil_bender();

@@ -16,13 +16,11 @@ const double seuil = 1.6;
      }
 
 
-double mesure_seuil(){
+double mesure_seuil_bender(){
     double diff = mesure();
     if(diff>=seuil){
-        pc.printf(" diff= %.4f\t",diff);
+        pc.printf(" diff= %.3f\t",diff);
         return diff;
         }
     return -1;
  }
- 
-

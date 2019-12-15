@@ -61,13 +61,13 @@ text(30,0.115,str,'Color','r')
 
 
 %% agitation moyenne
-%bender= [497;1294;1234;1303;1314;1246];
+bender= [497;1294;1234;1303;1314;1246];
 %bender=[1393;1398;1387;1369;1386;1331];
-bender=[1273;1287;1265;1296;1294;1276];
+%bender=[1273;1287;1265;1296;1294;1276];
 bender = 3*bender/1000;
-%norme = [377;137;185;227;255;244];
+norme = [377;137;185;227;255;244];
 %norme=[130;172;157;177;160;186];
-norme=[477;132;241;196;169;149];
+%norme=[477;132;241;196;169;149];
 norme = norme/1000;
 sumb = 0;
 sumn = 0;
@@ -90,7 +90,7 @@ plot(time(1 : end),bender);
 xlabel({'temps','(en s)'});
 ylabel({'tension','(en mV)'});
 str = ['moyenne =  ',num2str(moyenbender)];
-text(20,3.87,str,'Color','r')
+text(20,3,str,'Color','r')
 title('bender');
 
 subplot(2,1,2);
@@ -106,7 +106,7 @@ xlabel({'temps','(en s)'});
 ylabel({'accéleration','(en M/s²)'});
 title('mma');
 str = ['moyenne =  ',num2str(moyenmma)];
-text(30,0.4,str,'Color','r')
+text(20,0.3,str,'Color','r')
 
 
 %% agitation forte
